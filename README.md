@@ -12,6 +12,8 @@ Quelques corrections mineures ont été apportées à la table principale avec O
 ### Code de l'application
 L'application a été écrite en langage R avec l'extension [Shiny](https://cran.r-project.org/web/packages/shiny/index.html) par Pascal Brissette (pascal.brissette\@mcgill.ca).
 
+
+
 ### Références
 
 #### Volume 1

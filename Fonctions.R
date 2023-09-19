@@ -37,6 +37,40 @@ filter_data <- function(data, input, return_columns = NULL) {
   return(filtered_data)
 }
 
-
-
-
+plot_histogram <- function(data_frame) {
+  if ("Annee_unique" %in% names(data_frame) && nrow(data_frame) > 0) {
+    min_year <- min(na.omit(data_frame[, Annee_unique]))
+    max_year <- max(na.omit(data_frame[, Annee_unique]))
+    breaks_hist <- seq(min_year, max_year, length.out = input$num_breaks + 1)
+    
+    if (input$dist_type == "raw") {
+      hist(data_frame()[, Annee_unique],
+           main = "Distribution brute des notices",
+           xlab = "Année",
+           ylab = "Nombre",
+           border = "blue",
+           col = "lightblue",
+           breaks = breaks_hist)
+    } else {
+      # Compute relative distribution
+      filtered_counts <- hist(data_frame[, Annee_unique], plot=FALSE, breaks=breaks_hist)$counts
+      total_counts <- hist(data[data$Annee_unique %in% data_frame[, Annee_unique], Annee_unique], plot=FALSE, breaks=breaks_hist)$counts
+      relative_counts <- ifelse(total_counts == 0, 0, filtered_counts / total_counts)
+      
+      # Ensure names.arg matches the length of relative_counts
+      names_for_bars <- round(seq(min_year, max_year, length.out = length(relative_counts)))
+      
+      barplot(relative_counts, 
+              main = "Distribution relative des notices",
+              xlab = "Année",
+              ylab = "Fréquence relative",
+              border = "blue",
+              col = "lightblue",
+              space = 0,
+              names.arg = names_for_bars)
+    }
+  } else {
+    plot.new()
+    title(main = "No data available for the selected criteria")
+  }
+}
